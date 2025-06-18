@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use App\Enums\StatusJob;
 use App\Enums\TypeContract;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-    Use SoftDeletes;
+    Use SoftDeletes, HasFactory;
     
     protected $table = 'job_vacancies';
     
@@ -22,6 +24,7 @@ class Job extends Model
 
     protected $casts = [
         'type_contract' => TypeContract::class,
+        'status' => StatusJob::class,
     ];
 
      public function candidates(){

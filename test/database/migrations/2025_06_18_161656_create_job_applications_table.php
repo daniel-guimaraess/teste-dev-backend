@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('job_id')->constrained('job_vacancies')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('status')->default('pending');
+            $table->string('status')->default('analyzing');
             $table->timestamp('applied_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -81,7 +81,8 @@ class UserService
         } catch (\Throwable $th) {
 
             return response()->json([
-                'message' => 'Não foi possível atualizar o usuário'
+                'message' => 'Não foi possível atualizar o usuário',
+                'error' => $th->getMessage()
             ], 500);
         }
     }

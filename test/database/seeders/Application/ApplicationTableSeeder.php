@@ -16,15 +16,18 @@ class ApplicationTableSeeder extends Seeder
         $applications = [
             [
                 'job_id' => 1,
-                'user_id' => 2
+                'user_id' => 2,
+                'applied_at' => now()
             ],
             [
                 'job_id' => 3,
-                'user_id' => 2
+                'user_id' => 2,
+                'applied_at' => now()
             ],
             [
                 'job_id' => 2,
-                'user_id' => 3
+                'user_id' => 3,
+                'applied_at' => now()
             ],
         ];
 

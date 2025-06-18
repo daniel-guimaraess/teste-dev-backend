@@ -63,7 +63,8 @@ class JobService
         } catch (\Throwable $th) {
 
             return response()->json([
-                'message' => 'Não foi possível cadastrar a vaga'               
+                'message' => 'Não foi possível cadastrar a vaga' ,
+                'error' => $th->getMessage()
             ], 500);
         } 
     }

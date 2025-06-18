@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\StatusJob;
 use App\Models\Application;
 use App\Models\Job;
 use App\Repositories\ApplicationRepository;
@@ -48,7 +49,7 @@ class ApplicationService
     public function create(Request $request){
 
         try {
-            if(Job::find($request['job_id'])->status === 'open'){
+            if($job = Job::find($request['job_id'])->status === StatusJob::OPEN){
 
                 $this->applicationRepository->create($request);
 
@@ -58,14 +59,13 @@ class ApplicationService
             }
 
             return response()->json([
-                    'message' => 'Esta vaga não aceita mais candidaturas'
+                    'message' => 'Esta vaga não aceita mais candidaturas',
                 ], 400);
 
         } catch (\Throwable $th) {
 
             return response()->json([
-                'message' => 'Não foi possível efetuar a candidatura',
-                'error' => $th->getMessage()
+                'message' => 'Não foi possível efetuar a candidatura'
             ], 500);
         } 
     }
