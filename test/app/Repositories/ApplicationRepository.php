@@ -9,7 +9,12 @@ class ApplicationRepository
 {   
     public function getApplicationsByJobID($jobId){
         
-        return Application::find($jobId);
+        return Application::where('job_id', $jobId)->get();
+    }
+
+    public function getApplicationsByUserID($userId){
+        
+        return Application::where('user_id', $userId)->get();
     }
 
     public function create(Request $request){

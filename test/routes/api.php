@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 #Rotas públicas
 Route::post('login', [AuthController::class, 'login']);
 
+#Rotas privadas
 Route::middleware(['auth:sanctum'])->group(function () { 
 
     #Usuários
@@ -29,8 +30,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     #Candidaturas
     Route::get('applications/job/{id}', [ApplicationController::class, 'getApplicationsByJobID']);
+    Route::get('applications/user/{id}', [ApplicationController::class, 'getApplicationsByUserID']);
     Route::post('applications', [ApplicationController::class, 'create']);
     Route::put('applications/{id}', [ApplicationController::class, 'updateStatus']);
     Route::delete('applications/{id}', [ApplicationController::class, 'delete']);
+
+    Route::post('logout', [AuthController::class, 'logout']);
 });
 

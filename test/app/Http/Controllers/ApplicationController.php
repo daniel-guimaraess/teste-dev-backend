@@ -22,6 +22,12 @@ class ApplicationController extends Controller
     }
 
 
+    public function getApplicationsByUserID(string|int $userId){
+
+        return $this->applicationService->getApplicationsByUserID($userId);
+    }
+
+
     public function create(Request $request){
 
         Validator::make($request->all(), [

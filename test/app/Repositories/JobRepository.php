@@ -4,12 +4,34 @@ namespace App\Repositories;
 
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class JobRepository
 {   
     public function index(Request $request){
-        
-        return Job::all();
+
+        $query = Job::query();
+
+        $filter = $request->get('filter');
+        $paginateBy = $request->get('paginate');
+        $orderBy = $request->get('order_by', 'id');
+        $orderDir = $request->get('order_dir', 'desc');
+
+        if ($filter) {
+            $columns = Schema::getColumnListing('job_vacancies');
+
+            $query->where(function ($q) use ($columns, $filter) {
+                foreach ($columns as $column) {
+                    $q->orWhere($column, 'like', '%' . $filter . '%');
+                }
+            });
+        }
+
+        if (Schema::hasColumn('job_vacancies', $orderBy)) {
+            $query->orderBy($orderBy, $orderDir);
+        }
+
+        return $paginateBy ? $query->paginate($paginateBy) : $query->paginate(20);
     }
 
     public function show(string|int $id){

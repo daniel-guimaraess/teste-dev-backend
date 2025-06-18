@@ -15,14 +15,20 @@ class UserTableSeeder extends Seeder
         $users = [
             [   
                 'role_id' => 1,
-                'name' => 'Recrutador',
-                'email' => 'recruiter@neoestech.com.br',
+                'name' => 'Maria recrutadora',
+                'email' => 'maria@neoestech.com.br',
                 'password' => '#Recruiter10'
             ],
             [   
                 'role_id' => 2,
-                'name' => 'Candidato',
-                'email' => 'candidate@neoestech.com.br',
+                'name' => 'Daniel candidato',
+                'email' => 'daniel@neoestech.com.br',
+                'password' => '#Candidate10'
+            ],
+            [   
+                'role_id' => 2,
+                'name' => 'Matheus candidato',
+                'email' => 'matheus@neoestech.com.br',
                 'password' => '#Candidate10'
             ],
         ];

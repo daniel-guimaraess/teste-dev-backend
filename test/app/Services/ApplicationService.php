@@ -31,6 +31,20 @@ class ApplicationService
     }
 
 
+    public function getApplicationsByUserID(string|int $userId){
+
+        try {            
+            return $this->applicationRepository->getApplicationsByUserID($userId);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'message' => 'Não foi possível exibir a lista de candidaturas'
+            ], 500);
+        } 
+    }
+
+
     public function create(Request $request){
 
         try {
