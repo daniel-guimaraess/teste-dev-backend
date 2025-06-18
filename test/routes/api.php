@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\UserController;
@@ -25,5 +26,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('jobs/{id}', [JobController::class, 'delete']);
     Route::post('jobs/{id}/finish', [JobController::class, 'finishJob']);
     Route::post('jobs/{id}/pause', [JobController::class, 'pauseJob']);
+
+    #Candidaturas
+    Route::get('applications/job/{id}', [ApplicationController::class, 'getApplicationsByJobID']);
+    Route::post('applications', [ApplicationController::class, 'create']);
+    Route::put('applications/{id}', [ApplicationController::class, 'updateStatus']);
+    Route::delete('applications/{id}', [ApplicationController::class, 'delete']);
 });
 

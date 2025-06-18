@@ -56,8 +56,7 @@ class UserService
         } catch (\Throwable $th) {
 
             return response()->json([
-                'message' => 'Não foi possível cadastrar o usuário',
-                'error' => $th->getMessage()
+                'message' => 'Não foi possível cadastrar o usuário'
             ], 500);
         } 
     }

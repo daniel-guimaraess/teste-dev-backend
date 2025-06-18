@@ -23,4 +23,9 @@ class Job extends Model
     protected $casts = [
         'type_contract' => TypeContract::class,
     ];
+
+     public function candidates(){
+        
+        return $this->belongsToMany(Application::class);
+    }
 }
