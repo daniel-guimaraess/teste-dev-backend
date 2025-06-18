@@ -14,10 +14,6 @@ class RoleTableSeeder extends Seeder
     {
         $roles = [
             [
-                'name' => 'admin',
-                'description' => 'Pode acessar e gerenciar todas as funcionalidades do sistema, incluindo configurações, usuários e vagas.'
-            ],
-            [
                 'name' => 'recruiter',
                 'description' => 'Pode criar e divulgar vagas, além de gerenciar candidaturas recebidas.'
             ],
