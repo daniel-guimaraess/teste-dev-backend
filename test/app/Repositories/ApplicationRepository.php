@@ -4,17 +4,34 @@ namespace App\Repositories;
 
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ApplicationRepository
 {   
     public function getApplicationsByJobID($jobId){
         
-        return Application::where('job_id', $jobId)->get();
+        $cacheKey = 'get_applications_job_' . $jobId;
+        if(!Cache::has($cacheKey))
+        {
+            $result = Application::where('job_id', $jobId)->get();
+
+            Cache::put($cacheKey, $result, 60);
+        }
+
+        return Cache::get($cacheKey);
     }
 
     public function getApplicationsByUserID($userId){
         
-        return Application::where('user_id', $userId)->get();
+        $cacheKey = 'get_applications_user_' . $userId;
+        if(!Cache::has($cacheKey))
+        {
+            $result = Application::where('user_id', $userId)->get();
+            
+            Cache::put($cacheKey, $result, 60);
+        }
+
+        return Cache::get($cacheKey);
     }
 
     public function create(Request $request){

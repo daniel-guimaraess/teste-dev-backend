@@ -4,34 +4,49 @@ namespace App\Repositories;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
 class UserRepository
 {   
-    public function index(Request $request){
-
-        $query = User::query();
-
-        $filter = $request->get('filter');
+    public function index(Request $request)
+    {
+        $filter     = $request->get('filter');
         $paginateBy = $request->get('paginate');
-        $orderBy = $request->get('order_by', 'id');
-        $orderDir = $request->get('order_dir', 'desc');
+        $orderBy    = $request->get('order_by', 'id');
+        $orderDir   = $request->get('order_dir', 'desc');
 
-        if ($filter) {
-            $columns = Schema::getColumnListing('users');
+        $cacheKey = 'users:index:' . md5(json_encode([
+            'filter'     => $filter,
+            'paginate'   => $paginateBy,
+            'order_by'   => $orderBy,
+            'order_dir'  => $orderDir,
+        ]));
 
-            $query->where(function ($q) use ($columns, $filter) {
-                foreach ($columns as $column) {
-                    $q->orWhere($column, 'like', '%' . $filter . '%');
-                }
-            });
+        if (!Cache::has($cacheKey)) {
+            $query = User::query();
+
+            if ($filter) {
+                $columns = Schema::getColumnListing('users');
+
+                $query->where(function ($q) use ($columns, $filter) {
+                    foreach ($columns as $column) {
+                        $q->orWhere($column, 'like', '%' . $filter . '%');
+                    }
+                });
+            }
+
+            if (Schema::hasColumn('users', $orderBy)) {
+                $query->orderBy($orderBy, $orderDir);
+            }
+
+            $result = $paginateBy ? $query->paginate($paginateBy) : $query->paginate(20);
+
+            Cache::put($cacheKey, $result, 60);
         }
 
-        if (Schema::hasColumn('users', $orderBy)) {
-            $query->orderBy($orderBy, $orderDir);
-        }
-
-        return $paginateBy ? $query->paginate($paginateBy) : $query->paginate(20);
+        return Cache::get($cacheKey);
     }
 
     public function show(string|int $id){

@@ -4,34 +4,49 @@ namespace App\Repositories;
 
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
 class JobRepository
 {   
     public function index(Request $request){
 
-        $query = Job::query();
-
         $filter = $request->get('filter');
         $paginateBy = $request->get('paginate');
         $orderBy = $request->get('order_by', 'id');
         $orderDir = $request->get('order_dir', 'desc');
 
-        if ($filter) {
-            $columns = Schema::getColumnListing('job_vacancies');
+        $cacheKey = 'users:index:' . md5(json_encode([
+            'filter'     => $filter,
+            'paginate'   => $paginateBy,
+            'order_by'   => $orderBy,
+            'order_dir'  => $orderDir,
+        ]));
 
-            $query->where(function ($q) use ($columns, $filter) {
-                foreach ($columns as $column) {
-                    $q->orWhere($column, 'like', '%' . $filter . '%');
-                }
-            });
+        if(!Cache::has($cacheKey)){
+
+            $query = Job::query();
+
+            if ($filter) {
+                $columns = Schema::getColumnListing('job_vacancies');
+
+                $query->where(function ($q) use ($columns, $filter) {
+                    foreach ($columns as $column) {
+                        $q->orWhere($column, 'like', '%' . $filter . '%');
+                    }
+                });
+            }
+
+            if (Schema::hasColumn('job_vacancies', $orderBy)) {
+                $query->orderBy($orderBy, $orderDir);
+            }
+
+            $result = $paginateBy ? $query->paginate($paginateBy) : $query->paginate(20);
+
+            Cache::put($cacheKey, $result, 60);
         }
-
-        if (Schema::hasColumn('job_vacancies', $orderBy)) {
-            $query->orderBy($orderBy, $orderDir);
-        }
-
-        return $paginateBy ? $query->paginate($paginateBy) : $query->paginate(20);
+        
+        return Cache::get($cacheKey);
     }
 
     public function show(string|int $id){
