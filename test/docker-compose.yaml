@@ -10,6 +10,7 @@ services:
       - .:/var/www/html
     depends_on:
       - database
+      - redis 
     restart: always
     networks:
       - app
@@ -25,6 +26,15 @@ services:
       MYSQL_DATABASE: database
     volumes:
       - database_volume:/var/lib/mysql
+    networks:
+      - app
+    
+  redis:
+    image: redis:7.0-alpine
+    container_name: redis-neoestech
+    restart: always
+    ports:
+      - "6379:6379"
     networks:
       - app
 

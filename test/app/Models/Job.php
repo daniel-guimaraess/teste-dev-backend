@@ -27,8 +27,8 @@ class Job extends Model
         'status' => StatusJob::class,
     ];
 
-     public function candidates(){
+     public function applications(){
         
-        return $this->belongsToMany(Application::class);
+        return $this->belongsToMany(Application::class, 'applications');
     }
 }

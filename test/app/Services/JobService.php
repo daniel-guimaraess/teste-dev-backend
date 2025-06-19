@@ -188,4 +188,22 @@ class JobService
             ], 500);
         }
     }
+
+    public function bulkDelete(Request $request){
+
+        try {
+            $this->jobRepository->bulkDelete($request);
+
+            return response()->json([
+                'message' => 'Vagas removidas com sucesso'
+            ], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'message' => 'Não foi possível remover as vagas',
+                'error' => $th->getMessage()
+            ], 500);
+        } 
+    }
 }

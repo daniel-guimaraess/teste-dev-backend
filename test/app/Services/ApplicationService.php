@@ -119,4 +119,22 @@ class ApplicationService
             ], 500);
         } 
     }
+
+    public function bulkDelete(Request $request){
+
+        try {
+            $this->applicationRepository->bulkDelete($request);
+
+            return response()->json([
+                'message' => 'Candidaturas removidas com sucesso'
+            ], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'message' => 'Não foi possível remover as candidaturas',
+                'error' => $th->getMessage()
+            ], 500);
+        } 
+    }
 }

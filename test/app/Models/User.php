@@ -55,8 +55,8 @@ class User extends Authenticatable
     }
 
 
-    public function jobsAplications(){
+    public function applications(){
         
-        return $this->belongsToMany(Application::class);
+        return $this->belongsToMany(Application::class, 'applications');
     }
 }

@@ -95,4 +95,16 @@ class JobRepository
             'status' => 'paused'
         ]);
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        Job::whereIn('id', $ids)->each(function ($job) {
+            $job->applications()->detach();
+            $job->delete();
+        });
+
+        Job::whereIn('id', $ids)->delete();
+    }
 }

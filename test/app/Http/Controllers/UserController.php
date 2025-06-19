@@ -52,4 +52,14 @@ class UserController extends Controller
 
         return $this->userService->delete($id);
     }
+
+    public function bulkDelete(Request $request){
+
+        Validator::make($request->all(), [
+            'ids' => 'required', 'array',
+
+        ])->validate();
+
+        return $this->userService->bulkDelete($request);
+    }
 }

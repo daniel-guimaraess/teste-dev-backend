@@ -55,4 +55,14 @@ class ApplicationController extends Controller
 
         return $this->applicationService->delete($id);
     }
+
+    public function bulkDelete(Request $request){
+
+        Validator::make($request->all(), [
+            'ids' => 'required', 'array',
+
+        ])->validate();
+
+        return $this->applicationService->bulkDelete($request);
+    }
 }

@@ -25,7 +25,8 @@ class UserService
         } catch (\Throwable $th) {
 
             return response()->json([
-                'message' => 'Não foi possível exibir a lista de usuários'
+                'message' => 'Não foi possível exibir a lista de usuários',
+		'error' => $th->getMessage()
             ], 500);
         } 
     }
@@ -56,7 +57,8 @@ class UserService
         } catch (\Throwable $th) {
 
             return response()->json([
-                'message' => 'Não foi possível cadastrar o usuário'
+                'message' => 'Não foi possível cadastrar o usuário',
+		'error' => $th->getMessage()
             ], 500);
         } 
     }
@@ -108,6 +110,24 @@ class UserService
 
             return response()->json([
                 'message' => 'Não foi possível remover o usuário'
+            ], 500);
+        } 
+    }
+
+    public function bulkDelete(Request $request){
+
+        try {
+            $this->userRepository->bulkDelete($request);
+
+            return response()->json([
+                'message' => 'Usuários removidos com sucesso'
+            ], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json([
+                'message' => 'Não foi possível remover os usuários',
+                'error' => $th->getMessage()
             ], 500);
         } 
     }

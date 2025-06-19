@@ -66,4 +66,14 @@ class JobController extends Controller
 
         return $this->jobService->pauseJob($id);
     }
+
+    public function bulkDelete(Request $request){
+
+        Validator::make($request->all(), [
+            'ids' => 'required', 'array',
+
+        ])->validate();
+
+        return $this->jobService->bulkDelete($request);
+    }
 }

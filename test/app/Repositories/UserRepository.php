@@ -78,4 +78,16 @@ class UserRepository
 
         $user->delete();
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        User::whereIn('id', $ids)->each(function ($user) {
+            $user->applications()->detach();
+            $user->delete();
+        });
+
+        User::whereIn('id', $ids)->delete();
+    }
 }

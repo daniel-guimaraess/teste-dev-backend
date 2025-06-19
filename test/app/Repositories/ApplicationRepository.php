@@ -54,4 +54,11 @@ class ApplicationRepository
 
         $application->delete();
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('ids');
+
+        Application::whereIn('id', $ids)->delete();
+    }
 }
