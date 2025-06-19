@@ -20,6 +20,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('users', [UserController::class, 'create']);
     Route::put('users/{id}', [UserController::class, 'update']);
     Route::delete('users/{id}', [UserController::class, 'delete']);
+    Route::post('users/delete', [UserController::class, 'bulkDelete']);
 
     #Vagas
     Route::get('jobs', [JobController::class, 'index']);
@@ -29,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('jobs/{id}', [JobController::class, 'delete']);
     Route::post('jobs/{id}/finish', [JobController::class, 'finishJob']);
     Route::post('jobs/{id}/pause', [JobController::class, 'pauseJob']);
+    Route::post('jobs/delete', [JobController::class, 'bulkDelete']);
 
     #Candidaturas
     Route::get('applications/job/{id}', [ApplicationController::class, 'getApplicationsByJobID']);
@@ -36,6 +38,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('applications', [ApplicationController::class, 'create']);
     Route::put('applications/{id}', [ApplicationController::class, 'updateStatus']);
     Route::delete('applications/{id}', [ApplicationController::class, 'delete']);
+    Route::post('applications/delete', [ApplicationController::class, 'bulkDelete']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
