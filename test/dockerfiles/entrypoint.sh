@@ -18,5 +18,11 @@ wait-for-it database-neoestech:3306 --timeout=10 --strict -- echo "Banco de dado
 php artisan key:generate --force
 php artisan migrate --force
 php artisan db:seed --force
+php artisan import-data-csv
 
-exec php-fpm
+exec php-fpm &
+
+exec supervisord -n
+supervisorctl reread
+supervisorctl update
+supervisorctl start supervisor-queue

@@ -4,6 +4,8 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\UserController;
+use App\Models\ImportDataCSV;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 #Rotas públicas
@@ -36,5 +38,24 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('applications/{id}', [ApplicationController::class, 'delete']);
 
     Route::post('logout', [AuthController::class, 'logout']);
+});
+
+Route::get('temperatures/information', function() {
+    $data = ImportDataCSV::all();
+    $finalData = [];
+
+    foreach($data as $date){
+        $finalData[Carbon::parse($date->date)->format('d/m/Y')] = [
+            'Média' => round($date->average, 2),
+            'Mediana' => round($date->median, 2),
+            'Valor Mínimo' => $date->min_value,
+            'Valor Máximo' => $date->max_value,
+            'Porcentagem acima de 10' => round($date->percent_above_10, 2),
+            'Porcentagem abaixo de -10' => round($date->percent_below_minus_10, 2),
+            'Porcentagem entre -10 e 10' => round($date->percent_between_minus_10_and_10, 2),
+        ];
+    }
+
+    return response()->json($finalData);
 });
 

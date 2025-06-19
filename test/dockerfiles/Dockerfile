@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     zlib1g-dev \
     unzip \
     procps \
+    supervisor \
     && docker-php-ext-install gd zip pdo pdo_mysql pcntl
 
 RUN docker-php-ext-configure pcntl --enable-pcntl
@@ -24,7 +25,10 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 COPY .env /var/www/html/.env
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY dockerfiles/supervisor-queue.conf /etc/supervisor/conf.d/supervisor-queue.conf
+RUN chmod 0644 /etc/supervisor/conf.d/supervisor-queue.conf
+
+COPY dockerfiles/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
